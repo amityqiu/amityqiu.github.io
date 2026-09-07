@@ -131,6 +131,7 @@ button{font:inherit;color:inherit}
 .list li:last-child{border-bottom:1px solid var(--rule)}
 .list li span{display:block;font-family:var(--sans);font-size:13px;color:var(--ink-3);margin-top:3px}
 .note{font-size:13px;color:var(--ink-3);margin-top:18px}
+.md p{margin:0 0 16px;max-width:38em;font-size:16px}.md .sub{color:var(--ink-3);font-size:13px;margin:-2px 0 24px;letter-spacing:.02em}.md h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:30px 0 8px}.md ul{margin:0 0 16px;padding-left:1.1em;color:var(--ink-2);font-size:15px}.md .pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:6px 0 26px}.md .pics figure{margin:0;background:var(--mat)}.md .pics img{width:100%;display:block;cursor:zoom-in}.md .pics figcaption{font-size:12px;color:var(--ink-3);padding:6px 2px 0}.md a{color:inherit;text-decoration:none;border-bottom:1px solid var(--ink-3)}.md a:hover{color:var(--red);border-color:var(--red)}.md .lb{position:fixed;inset:0;background:rgba(20,18,16,.92);display:flex;align-items:center;justify-content:center;z-index:50;cursor:zoom-out}.md .lb img,.lbox img{max-width:min(1100px,94vw);max-height:92vh}.lbox{position:fixed;inset:0;background:rgba(20,18,16,.92);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out}.lbox.on{display:flex}
 
 /* camera panel */
 .finder{background:#141210;color:#e9e2d8;margin:0 calc(-1 * clamp(20px,5vw,64px));padding:36px clamp(20px,5vw,64px) 40px}
@@ -142,7 +143,7 @@ button{font:inherit;color:inherit}
 .frame .cross::before,.frame .cross::after{content:"";position:absolute;background:#e9e2d8}
 .frame .cross::before{left:50%;top:0;bottom:0;width:1px}.frame .cross::after{top:50%;left:0;right:0;height:1px}
 .photo{width:min(820px,92%);height:88%;background:linear-gradient(135deg,#6f5f52,#3b3531);border:14px solid #0a0908;box-shadow:0 0 0 1px rgba(233,226,216,.15);display:flex;align-items:center;justify-content:center;color:rgba(233,226,216,.55);font-size:13px;letter-spacing:.1em;transition:opacity .25s}
-.photo.fade{opacity:0}
+.photo.fade{opacity:0}.photo img{width:100%;height:100%;object-fit:contain;display:none}.photo img.show{display:block}.photo{background:#1a1614}
 .capbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;font-size:13px;color:#a39a91;margin-top:18px}.capbar .k{text-align:right}
 .shutter{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;border:1px solid rgba(233,226,216,.6);display:grid;place-items:center}
 .shutter::before{content:"";width:30px;height:30px;border-radius:50%;background:#e9e2d8;transition:transform .12s}
@@ -179,8 +180,7 @@ button{font:inherit;color:inherit}
   <div class="stage">
     <div class="motto">
       <h1>让内容有价值，<br>让传播有温度。</h1>
-      <p>有价值的内容，不光是被官方媒体和业务认可，还得被大家认可。稿子有官媒署名，礼盒有媒体愿意报道，写的东西有人点赞有人转，这些是口碑。哪怕新年礼盒包装上的一行字，我也希望它能说出品牌的价值，和这份礼物想传递的人文价值。</p>
-      <p>温度也不只是温暖。是一种能稳住人心神的力量。所以礼盒上我写的是『你的能量仓已开启』；做雇主品牌，我去找算法实习生和 mentor 聊，把对话写成一篇访谈。品牌形象也好，雇主品牌也好，我想做的都是这样的内容：有力量，有温度，有价值。</p>
+      <div id="intro"></div>
       <div class="hint" id="hint">欢迎抽一本我的案例case，来听我讲故事。</div>
     </div>
 
@@ -287,65 +287,19 @@ button{font:inherit;color:inherit}
     <!-- ===== panel ===== -->
     <div class="panel" id="panel">
 
-      <section class="chapter" data-ch="style3d"><div class="page">
-        <h2>Style3D 新年品牌礼盒与 AR 红包传播</h2>
-        <p class="sub">凌迪科技 Style3D　2025.10 – 2026.02</p>
-        <p class="role"><b>品牌公关</b>　策划、内容、跨部门执行</p>
-        <p class="lede">围绕新年这个年度传播节点，把一盒礼物做成品牌触点：从礼盒策划、包装文案到 AR 红包互动，再到公众号与视频内容的持续输出，客户和媒体两条路径同时走。</p>
-        <ul class="facts"><li><b>23<i>篇</i></b>独立完成的公众号内容，含 1 篇 SVG 互动</li><li><b>25<i>条</i></b>品牌视频脚本</li><li><b>1<i>套</i></b>礼盒项目 SOP 与执行流程</li></ul>
-        <div class="grid c3"><div class="ph r169 sp2">礼盒实物</div><div class="ph r34">SVG 互动</div><div class="ph r11">小红书传播</div><div class="ph r11">收到的反馈</div><div class="ph r11">公众号内容</div></div>
-        <div class="cols"><div><h3>传播策略</h3><ul><li>参与新年品牌传播方案设计，明确礼盒作为年度品牌触点的定位与目标</li><li>定义客户与媒体双传播路径</li></ul></div><div><h3>跨部门协作</h3><ul><li>对接设计、产品、销售及供应商，把礼盒从方案推到落地</li><li>建立礼盒项目 SOP 与执行流程规范</li></ul></div></div>
-      </div></section>
+      <section class="chapter" data-ch="style3d" data-md="box"><div class="page"><p class="note">读取中…</p></div></section>
 
-      <section class="chapter" data-ch="exhibition"><div class="page">
-        <h2>国家艺术基金巡展的媒体传播</h2>
-        <p class="sub">131 件织锦精品杭州展　浙江理工大学　2026</p>
-        <p class="role"><b>媒体传播与公关执行</b>　在校期间参与</p>
-        <p class="lede">一场国家艺术基金支持的织锦巡展，在杭州开幕。期间参与媒体传播相关事宜。开幕当天做媒体接待和采访安排：8 家媒体的现场联络、新闻稿的撰写和分发，以及后续报道的收集整理。</p>
-        <p class="lede">央视、浙江在线、潮新闻等的报道底稿由我撰写，其中杭州新闻发表的<a href="https://apiv4.cst123.cn/cst/news/shareDetail?id=1234530070102540288&amp;ic=wvsghu5c8j" target="_blank" rel="noopener">《131件织锦精品亮相杭州，国家艺术基金巡展再现“锦绣中华”新活力》</a>由我署名。</p>
-        <div class="grid c3"><div class="ph r169 sp2">开幕式现场</div><div class="ph r34">报道页面</div></div>
-        <div class="grid c2"><div class="ph r169">央视、浙江在线、潮新闻等报道</div><div class="ph r169">多平台发布记录</div></div>
-      </div></section>
+      <section class="chapter" data-ch="exhibition" data-md="expo"><div class="page"><p class="note">读取中…</p></div></section>
 
-      <section class="chapter" data-ch="early"><div class="page">
-        <h2>习作</h2>
-        <p class="sub">在校期间练手的作品　2021 – 2025</p>
-        <p class="lede">从策划到拍摄到剪辑，很多环节都是自己带着团队一力完成。</p>
-        <div class="sub-item"><div><h3>世界读书日：浙大赵瑜读书会直播</h3><p>「人工智能时代的传播反思」主题读书会，做直播的内容策划与传播。</p><div class="tag">浙江理工大学</div></div><div class="ph r34">海报</div></div>
-        <div class="sub-item"><div><h3>非遗纪录片《饵饵相传》</h3><p>担任组长拍摄。讲饵块的制作与市井售卖的传统，也讲云南本土咖啡店把它当茶点的新做法。</p><div class="tag">昆明学院　组长</div></div><div class="ph r169">纪录片截图</div></div>
-        <div class="sub-item"><div><h3>新闻节目《一季资讯》</h3><p>稿件、录制、剪辑全程由团队自己完成，作为组长带队，同时出镜播报。</p><div class="tag">昆明学院　组长、主持人</div></div><div class="ph r169">节目截图</div></div>
-        <div class="sub-item"><div><h3>大广赛获奖作品《可画厨房》</h3><p>总策划，获第十四届大广赛云南赛区三等奖。</p><div class="tag">云南赛区三等奖</div></div><div class="ph r34" style="max-width:130px">证书</div></div>
-      </div></section>
+      <section class="chapter" data-ch="early" data-md="early"><div class="page"><p class="note">读取中…</p></div></section>
 
-      <section class="chapter" data-ch="articles"><div class="page">
-        <h2>文章</h2>
-        <p class="sub">掌上春城 · Style3D · Meshy　2022 – 2026</p>
-        <p class="lede">这个部分是我的署名报道、公众号文章和访谈的汇编，欢迎来听我讲不同的故事。</p>
-        <ul class="list">
-          <li>七夕活动“花样”防艾　云南省健康宣教中心教你远离艾滋<span>掌上春城　2022 年 8 月</span></li>
-          <li>防诈全覆盖　官渡警方进社区面对面开展养老防诈宣传<span>掌上春城　2022 年 8 月</span></li>
-          <li>“百日行动”有成果！官渡公安通报表彰先进集体和个人<span>掌上春城　2022 年 8 月</span></li>
-          <li>“荷”你有约！禄劝平安福邀你共赏百亩荷花<span>掌上春城　2022 年 7 月</span></li>
-          <li>589 个盘龙好故事讲述“我们的新时代”，59 件作品得奖啦<span>掌上春城　2022 年 7 月</span></li>
-          <li>美图模式打开安宁凤仪　诗意生活并不遥远<span>掌上春城　2022 年 8 月</span></li>
-        </ul>
-        <p class="note">Style3D 公众号文章、Meshy 实习生与 mentor 访谈：待补。</p>
-      </div></section>
+      <section class="chapter" data-ch="articles" data-md="articles"><div class="page"><p class="note">读取中…</p></div></section>
 
-      <section class="chapter" data-ch="research"><div class="page">
-        <h2>研究与学习</h2>
-        <p class="sub">CSSCI 论文与在读经历</p>
-        <p class="role"><b>第二作者</b></p>
-        <p class="lede">审美劳动的异化与反思：基于马克思主义美学对体制内戏曲传播困境的批判与重构——以浙江小百花越剧团为例。发表于 CSSCI 来源期刊《马克思主义美学研究》，2026 年 4 月。</p>
-        <div class="grid c2"><div class="ph r169">发表页</div><div></div></div>
-        <h3 class="h3s">另一项参与的研究</h3>
-        <p class="lede small">中国居民心理与行为调查，北京大学公共卫生学院、上海交通大学、山东省立医院联合调查研究组，2023 年 4 – 6 月。负责田野信息收集与最后的数据整合，用 R、Excel 和 PowerBI 做基础统计与数据处理。</p>
-        <div class="cols"><div><h3>浙江理工大学　新闻与传播　硕士</h3><ul><li>2024.9 – 2027.6，研究生学分已修完</li><li>浙江省会展策划大赛二等奖、全国三等奖</li><li>清华大学 2024 秋季「大数据与因果推断研讨班」结课</li></ul></div><div><h3>昆明学院　广播电视学　本科</h3><ul><li>2020.9 – 2024.6，GPA 3.57 / 4.0</li><li>连续三年一等奖学金，云南省三好学生</li><li>省级优秀毕业生等奖项 20 余项</li></ul></div></div>
-      </div></section>
+      <section class="chapter" data-ch="research" data-md="research"><div class="page"><p class="note">读取中…</p></div></section>
 
       <section class="chapter" data-ch="camera">
         <div class="finder">
-          <div class="frame"><span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span><span class="cross"></span><div class="photo" id="photo"></div></div>
+          <div class="frame"><span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span><span class="cross"></span><div class="photo" id="photo"><img id="photoImg" alt=""><span id="photoEmpty"></span></div></div>
           <div class="capbar"><span id="capText"></span><button class="shutter" id="next" aria-label="下一张"></button><span class="k"><span id="counter">1 / 5</span>　左右键翻页</span></div>
         </div>
       </section>
@@ -353,9 +307,7 @@ button{font:inherit;color:inherit}
       <section class="chapter" data-ch="notes"><div class="page">
         <h2>随心记</h2>
         <p class="sub">想到什么写什么，最新的在上面</p>
-        <div class="entry"><time>2026.09.03</time><p>示例条目。这里是你随手写的东西，几十字也好，几百字也好，都是一条。</p></div>
-        <div class="entry"><time>2026.08.21</time><p>示例条目。字体用宋体，行距放宽，读起来像翻一本手账，不像看列表。</p></div>
-        <div class="entry"><time>2026.07.02</time><p>示例条目。如果哪天写得长了，再决定要不要做成可以点进去的独立页。</p></div>
+        <div id="notesBox"><p class="note">还没写。</p></div>
       </div></section>
 
     </div>
@@ -391,17 +343,82 @@ button{font:inherit;color:inherit}
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
 
-  var shots=[
-    {c:'linear-gradient(135deg,#6f5f52,#3b3531)',t:''},
-    {c:'linear-gradient(135deg,#9a8672,#5f7469)',t:''},
-    {c:'linear-gradient(135deg,#c8b59c,#6f5f52)',t:''},
-    {c:'linear-gradient(135deg,#3b3531,#c0331e)',t:''},
-    {c:'linear-gradient(135deg,#dccdb9,#9a8672)',t:''}
-  ], i=0, photo=document.getElementById('photo'), cap=document.getElementById('capText'), cnt=document.getElementById('counter');
-  function go(d){ i=(i+d+shots.length)%shots.length; photo.classList.add('fade');
-    setTimeout(function(){photo.style.background=shots[i].c;cap.textContent=shots[i].t;cnt.textContent=(i+1)+' / '+shots.length;photo.classList.remove('fade');},220); }
+  // ---- photos: read the photos/ folder of the GitHub repo ----
+  var REPO='amityqiu/amityqiu.github.io';
+  var shots=[], i=0, photo=document.getElementById('photo'), img=document.getElementById('photoImg'), empty=document.getElementById('photoEmpty'), cap=document.getElementById('capText'), cnt=document.getElementById('counter');
+  function showShot(){
+    if(!shots.length){img.classList.remove('show');empty.textContent='相册还是空的';cnt.textContent='0 / 0';return;}
+    empty.textContent=''; img.src=shots[i]; img.classList.add('show'); cnt.textContent=(i+1)+' / '+shots.length;
+  }
+  function go(d){ if(!shots.length)return; i=(i+d+shots.length)%shots.length; photo.classList.add('fade'); setTimeout(function(){showShot();photo.classList.remove('fade');},220); }
+  fetch('https://api.github.com/repos/'+REPO+'/contents/photos').then(function(r){return r.ok?r.json():[];}).then(function(list){
+    shots=(list||[]).filter(function(f){return f.type==='file'&&/\.(jpe?g|png|webp|gif)$/i.test(f.name);})
+      .sort(function(a,b){return a.name<b.name?1:-1;}).map(function(f){return 'photos/'+encodeURIComponent(f.name);});
+    showShot();
+  }).catch(showShot);
   document.getElementById('next').addEventListener('click',function(){go(1);});
   document.addEventListener('keydown',function(e){ if(cur==='camera'){if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);} });
+
+
+  // ---- content: read content/*.md ----
+  var IMG=/\.(jpe?g|png|webp|gif)$/i;
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function inline(s){
+    s=esc(s);
+    s=s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+    s=s.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return s;
+  }
+  function render(md){
+    var lines=md.replace(/\r/g,'').split('\n'), out='', para=[], list=[], pics=[];
+    function flush(){
+      if(para.length){out+='<p>'+inline(para.join('')) +'</p>';para=[];}
+      if(list.length){out+='<ul>'+list.map(function(l){return '<li>'+inline(l)+'</li>';}).join('')+'</ul>';list=[];}
+      if(pics.length){out+='<div class="pics">'+pics.map(function(p){return '<figure><img src="images/'+encodeURIComponent(p.f)+'" alt="'+esc(p.c)+'" loading="lazy">'+(p.c?'<figcaption>'+esc(p.c)+'</figcaption>':'')+'</figure>';}).join('')+'</div>';pics=[];}
+    }
+    lines.forEach(function(raw){
+      var l=raw.trim();
+      if(!l){flush();return;}
+      if(l.indexOf('# ')===0){flush();out+='<h2>'+inline(l.slice(2))+'</h2>';return;}
+      if(l.indexOf('## ')===0){flush();out+='<h3>'+inline(l.slice(3))+'</h3>';return;}
+      if(l.indexOf('> ')===0){flush();out+='<p class="sub">'+inline(l.slice(2))+'</p>';return;}
+      if(l.indexOf('- ')===0){if(para.length||pics.length)flush();list.push(l.slice(2));return;}
+      var m=l.split('|'); var f=m[0].trim();
+      if(IMG.test(f)&&f.indexOf(' ')<0){if(para.length||list.length)flush();pics.push({f:f,c:(m[1]||'').trim()});return;}
+      if(list.length||pics.length)flush();
+      para.push(l);
+    });
+    flush(); return out;
+  }
+  function load(el,name){
+    fetch('content/'+encodeURIComponent(name)+'.md',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text();})
+      .then(function(md){el.innerHTML='<div class="md">'+render(md)+'</div>';})
+      .catch(function(){el.innerHTML='<p class="note">读不到 content/'+name+'.md</p>';});
+  }
+  chapters.forEach(function(c){if(c.dataset.md)load(c.querySelector('.page'),c.dataset.md);});
+  var intro=document.getElementById('intro');
+  fetch('content/home.md',{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(md){
+    if(md.trim())intro.innerHTML=render(md);
+  }).catch(function(){});
+  // lightbox for content images
+  var lbox=document.createElement('div'); lbox.className='lbox'; lbox.innerHTML='<img alt="">'; document.body.appendChild(lbox);
+  document.addEventListener('click',function(e){var im=e.target.closest('.pics img'); if(im){lbox.querySelector('img').src=im.src;lbox.classList.add('on');}});
+  lbox.addEventListener('click',function(){lbox.classList.remove('on');});
+  document.addEventListener('error',function(e){var im=e.target; if(im.tagName==='IMG'&&im.closest('.pics')){var f=im.closest('figure'); f.innerHTML='<div class="ph" style="aspect-ratio:4/3">还没传：'+decodeURIComponent(im.getAttribute('src').replace('images/',''))+'</div>';}},true);
+
+  // ---- notes: read notes.md ----
+  fetch('notes.md',{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(md){
+    var box=document.getElementById('notesBox'); if(!md.trim())return;
+    var blocks=md.replace(/\r/g,'').split(/\n\s*\n/).map(function(b){return b.trim();}).filter(Boolean);
+    var html='';
+    blocks.forEach(function(b){
+      var lines=b.split('\n'); var first=lines[0].trim();
+      var date=/^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}$/.test(first)?first:''; if(date)lines.shift();
+      var body=lines.join('\n').trim().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+      html+='<div class="entry">'+(date?'<time>'+date+'</time>':'')+'<p>'+body+'</p></div>';
+    });
+    box.innerHTML=html;
+  }).catch(function(){});
 })();
 </script>
 </body>
