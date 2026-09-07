@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amity Qiu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fff;--ink:#24201c;--ink-2:#6f655d;--ink-3:#a39a91;--rule:#e6ded4;--mat:#f7f2ec;
+  --red:#c33a24;--cam:#3b3531;--note:#5f7469;
+  --serif:Georgia,"Songti SC","STSong","Noto Serif SC","Source Han Serif SC","Noto Serif CJK SC",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
+  --grain:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22120%22%20height%3D%22120%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.9%22%20numOctaves%3D%222%22%20seed%3D%223%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.5%200%200%200%200%20.5%200%200%200%200%20.5%200%200%200%20.22%200%22/%3E%3C/filter%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20filter%3D%22url%28%23n%29%22/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.75;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+
+.top{display:flex;justify-content:space-between;align-items:baseline;padding:26px 0 0}
+.top .name{font-family:var(--serif);font-size:20px}
+.top .name span{font-family:var(--sans);font-size:13px;color:var(--ink-3);margin-left:10px}
+.top a{font-size:13px;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule)}
+.top a:hover{color:var(--red);border-color:var(--red)}
+
+/* stage: motto left, shelf right */
+.stage{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:end;min-height:calc(100vh - 80px);padding:40px 0 0}
+.motto{align-self:center;padding-bottom:5vh}
+.motto h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,42px);line-height:1.4;margin:0 0 22px;letter-spacing:.01em}
+.motto p{margin:0 0 14px;color:var(--ink-2);font-size:15px;max-width:34em;line-height:1.85}
+.hint{margin-top:18px;font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:10px;min-height:22px}
+.hint::before{content:"";width:24px;height:1px;background:var(--ink-3);flex:none}
+@media (max-width:900px){.stage{grid-template-columns:1fr;min-height:0;align-items:start}.motto{padding-bottom:10px}}
+
+/* ---- shelf ---- */
+.shelf{position:relative;display:flex;align-items:flex-end;gap:5px;padding:0 20px 0 10px;border-bottom:1px solid var(--ink);perspective:1400px;perspective-origin:50% 60%}
+.shelf::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:1px;background:var(--rule)}
+@media (max-width:900px){.shelf{overflow-x:auto;overflow-y:visible;padding-top:30px;scrollbar-width:none}.shelf::-webkit-scrollbar{display:none}}
+
+.book{position:relative;border:0;background:none;padding:0;cursor:pointer;
+  width:var(--sw);height:var(--h);flex:none;
+  transition:width .7s cubic-bezier(.2,.7,.2,1),transform .35s cubic-bezier(.2,.7,.2,1)}
+.book:hover:not(.open){transform:translateY(-10px)}
+.b3d{position:absolute;left:0;bottom:0;width:var(--sw);height:var(--h);transform-style:preserve-3d;
+  transform-origin:var(--sw) 50%;transform:rotateY(0deg);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.book.open .b3d{transform:rotateY(-64deg)}
+.book.open{width:calc(var(--sw) * .44 + var(--cw) * .9)}
+.spine,.cover{position:absolute;bottom:0;left:0;height:var(--h);backface-visibility:hidden}
+.spine{width:var(--sw);background:var(--c);
+  background-image:linear-gradient(90deg,rgba(0,0,0,.14),rgba(255,255,255,.08) 18%,rgba(255,255,255,0) 40%,rgba(0,0,0,.08) 88%,rgba(0,0,0,.22)),var(--grain);
+  font-family:var(--serif);font-size:15px;letter-spacing:.14em;color:var(--t)}
+.spine span{position:absolute;top:22px;left:50%;transform:translateX(-50%);writing-mode:vertical-rl;text-orientation:mixed;white-space:nowrap}
+.spine small{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:var(--sans);font-size:10px;letter-spacing:.04em;opacity:.75;line-height:1.2}
+.cover{width:var(--cw);left:var(--sw);transform-origin:0 50%;transform:rotateY(90deg);background:var(--c);
+  box-shadow:inset 6px 0 10px -8px rgba(0,0,0,.35)}
+.cover svg{width:100%;height:100%;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:var(--grain);mix-blend-mode:multiply;opacity:.6;pointer-events:none}
+.book.open .spine{filter:brightness(.8)}
+.book .shadow{position:absolute;left:4px;right:-6px;bottom:-2px;height:10px;background:radial-gradient(ellipse at center,rgba(36,32,28,.35),transparent 70%);opacity:0;transition:opacity .5s}
+.book.open .shadow{opacity:1}
+
+/* rise-in */
+.book{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+.book:nth-child(1){animation-delay:.05s}.book:nth-child(2){animation-delay:.12s}.book:nth-child(3){animation-delay:.19s}.book:nth-child(4){animation-delay:.26s}.book:nth-child(5){animation-delay:.33s}.book:nth-child(6){animation-delay:.5s}.book:nth-child(7){animation-delay:.58s}
+@keyframes rise{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
+@media (prefers-reduced-motion:reduce){.book{animation:none;opacity:1}.b3d,.book{transition:none}}
+
+/* objects: a stack at the end of the row */
+.stack{position:relative;flex:none;margin-left:30px;width:136px;height:112px;opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) .5s forwards}
+.stack small{position:absolute;left:0;right:0;bottom:-26px;text-align:center;font-size:11px;color:var(--ink-3);letter-spacing:.06em}
+.obj{position:absolute;border:0;background:none;padding:0;cursor:pointer;width:auto;height:auto;opacity:1;animation:none;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+/* notebook lying flat, seen from the fore-edge */
+.notebook{left:0;bottom:0;width:136px;height:30px;perspective:600px}
+.notebook .body{position:absolute;inset:0;background:#e9e1d2;background-image:repeating-linear-gradient(180deg,rgba(0,0,0,.08) 0 1px,transparent 1px 3px),var(--grain);border-radius:1px;box-shadow:inset 0 -1px 0 rgba(0,0,0,.15)}
+.notebook .lid{position:absolute;left:-2px;right:-2px;top:0;height:7px;background:var(--note);background-image:var(--grain);border-radius:2px 2px 0 0;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.notebook .base{position:absolute;left:-2px;right:-2px;bottom:0;height:7px;background:var(--note);background-image:var(--grain);border-radius:0 0 2px 2px}
+.notebook .band{position:absolute;right:22px;top:-1px;bottom:-1px;width:4px;background:var(--red);opacity:.9}
+.notebook .tag{position:absolute;left:14px;top:9px;height:12px;width:38px;background:#fbf7ef;font-size:8px;line-height:12px;text-align:center;color:var(--ink-2);letter-spacing:.1em;font-family:var(--serif)}
+.notebook:hover,.notebook.open{transform:translateX(14px)}
+.notebook.open .body{box-shadow:inset 0 -1px 0 rgba(0,0,0,.15),0 10px 18px -12px rgba(36,32,28,.5)}
+/* camera resting on the notebook */
+.camera{left:22px;bottom:30px;width:92px;height:62px}
+.camera:hover{transform:translateY(-6px)}
+.camera .body{position:absolute;left:0;right:0;bottom:0;height:50px;background:var(--cam);background-image:var(--grain);border-radius:4px}
+.camera .leather{position:absolute;left:6px;right:6px;bottom:6px;height:30px;background:#4a423c;background-image:var(--grain);border-radius:2px}
+.camera .plate{position:absolute;left:0;right:0;bottom:44px;height:8px;background:#8d857c;border-radius:2px 2px 0 0}
+.camera .hump{position:absolute;left:32px;width:28px;bottom:50px;height:12px;background:#8d857c;border-radius:3px 3px 0 0}
+.camera .shutterbtn{position:absolute;right:12px;bottom:53px;width:8px;height:5px;background:#c9c2b6;border-radius:1px}
+.camera .dial{position:absolute;left:8px;bottom:51px;width:14px;height:6px;background:#3b3531;border-radius:2px 2px 0 0}
+.camera .lens{position:absolute;left:31px;bottom:8px;width:30px;height:30px;border-radius:50%;background:#1a1614;box-shadow:0 0 0 3px #8d857c,0 0 0 4px #2a2522,inset 0 0 0 6px #2a2522,inset 0 0 0 8px #0d0b0a;transition:transform .4s}
+.camera .lens::after{content:"";position:absolute;left:9px;top:8px;width:6px;height:4px;border-radius:50%;background:rgba(255,255,255,.35)}
+.camera.open .lens{transform:scale(1.06)}
+.camera .vf{position:absolute;right:14px;bottom:36px;width:12px;height:8px;background:#1a1614;border:1px solid #8d857c}
+.camera .dot{position:absolute;left:12px;bottom:38px;width:4px;height:4px;border-radius:50%;background:var(--red);opacity:.5}
+.camera.open .dot{opacity:1;box-shadow:0 0 0 3px rgba(195,58,36,.25)}
+.stack.open-cam small,.stack.open-note small{color:var(--ink)}
+
+/* ---- panel below shelf ---- */
+.panel{grid-column:1 / -1;overflow:hidden;max-height:0;opacity:0;transition:max-height .8s cubic-bezier(.2,.7,.2,1),opacity .5s;margin-top:40px}
+.panel.in{max-height:4000px;opacity:1}
+.chapter{display:none;padding:10px 0 100px;border-top:1px solid var(--rule)}
+.chapter.in{display:block;animation:fade .6s ease both}
+@keyframes fade{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+.page{max-width:820px;padding-top:44px}
+.page h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,38px);line-height:1.25;margin:0 0 6px}
+.page .sub{color:var(--ink-3);font-size:13px;margin:0 0 26px;letter-spacing:.02em}
+.page .role{font-size:14px;color:var(--ink-2);margin:0 0 24px}.page .role b{font-weight:500;color:var(--ink)}
+.page .lede{font-size:17px;max-width:38em;margin:0 0 28px}.page .lede.small{font-size:15px;color:var(--ink-2)}.h3s{font-size:14px;font-weight:500;margin:0 0 8px}.page .lede a{color:inherit;text-decoration:none;border-bottom:1px solid var(--ink-3)}.page .lede a:hover{color:var(--red);border-color:var(--red)}
+.facts{display:flex;flex-wrap:wrap;gap:10px 36px;margin:0 0 32px;padding:0;list-style:none}
+.facts li{font-size:14px;color:var(--ink-2)}
+.facts b{display:block;font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;color:var(--ink)}
+.facts b i{font-style:normal;font-size:15px;font-family:var(--sans);color:var(--ink-2);margin-left:3px}
+.ph{background:var(--mat);color:var(--ink-3);font-size:12px;display:flex;align-items:center;justify-content:center;letter-spacing:.06em}
+.grid{display:grid;gap:14px;margin:0 0 32px}.c3{grid-template-columns:repeat(3,1fr)}.c2{grid-template-columns:repeat(2,1fr)}
+.sp2{grid-column:span 2}.r169{aspect-ratio:16/9}.r34{aspect-ratio:3/4}.r11{aspect-ratio:1/1}
+@media (max-width:640px){.c3{grid-template-columns:repeat(2,1fr)}}
+.cols{display:grid;grid-template-columns:repeat(2,1fr);gap:24px 40px;padding:20px 0 0;border-top:1px solid var(--rule)}
+@media (max-width:600px){.cols{grid-template-columns:1fr}}
+.cols h3{font-size:14px;font-weight:500;margin:0 0 6px}.cols ul{margin:0;padding-left:1.1em;color:var(--ink-2);font-size:15px}
+.sub-item{display:grid;grid-template-columns:1fr 200px;gap:24px;padding:26px 0;border-top:1px solid var(--rule)}
+.sub-item:first-of-type{border-top:0;padding-top:0}
+.sub-item h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 6px}
+.sub-item p{margin:0;color:var(--ink-2);font-size:15px}.sub-item .tag{font-size:13px;color:var(--ink-3);margin-top:6px}
+@media (max-width:600px){.sub-item{grid-template-columns:1fr}}
+.list{list-style:none;margin:0;padding:0}
+.list li{border-top:1px solid var(--rule);padding:16px 0;font-family:var(--serif);font-size:19px}
+.list li:last-child{border-bottom:1px solid var(--rule)}
+.list li span{display:block;font-family:var(--sans);font-size:13px;color:var(--ink-3);margin-top:3px}
+.note{font-size:13px;color:var(--ink-3);margin-top:18px}
+
+/* camera panel */
+.finder{background:#141210;color:#e9e2d8;margin:0 calc(-1 * clamp(20px,5vw,64px));padding:36px clamp(20px,5vw,64px) 40px}
+.frame{position:relative;height:min(62vh,560px);display:flex;align-items:center;justify-content:center}
+.frame .corner{position:absolute;width:26px;height:26px;border:1px solid rgba(233,226,216,.7)}
+.frame .c1{left:0;top:0;border-right:0;border-bottom:0}.frame .c2{right:0;top:0;border-left:0;border-bottom:0}
+.frame .c3{left:0;bottom:0;border-right:0;border-top:0}.frame .c4{right:0;bottom:0;border-left:0;border-top:0}
+.frame .cross{position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);opacity:.5}
+.frame .cross::before,.frame .cross::after{content:"";position:absolute;background:#e9e2d8}
+.frame .cross::before{left:50%;top:0;bottom:0;width:1px}.frame .cross::after{top:50%;left:0;right:0;height:1px}
+.photo{width:min(820px,92%);height:88%;background:linear-gradient(135deg,#6f5f52,#3b3531);border:14px solid #0a0908;box-shadow:0 0 0 1px rgba(233,226,216,.15);display:flex;align-items:center;justify-content:center;color:rgba(233,226,216,.55);font-size:13px;letter-spacing:.1em;transition:opacity .25s}
+.photo.fade{opacity:0}
+.capbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;font-size:13px;color:#a39a91;margin-top:18px}.capbar .k{text-align:right}
+.shutter{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;border:1px solid rgba(233,226,216,.6);display:grid;place-items:center}
+.shutter::before{content:"";width:30px;height:30px;border-radius:50%;background:#e9e2d8;transition:transform .12s}
+.shutter:active::before{transform:scale(.85)}
+.capbar .k{font-size:12px;color:#6f655d}
+
+/* notebook panel */
+.entry{padding:28px 0;border-top:1px solid var(--rule);max-width:640px}
+.entry:first-of-type{border-top:0;padding-top:0}
+.entry time{display:block;font-size:12px;color:var(--ink-3);letter-spacing:.06em;margin-bottom:8px}
+.entry p{margin:0;font-family:var(--serif);font-size:17px;line-height:1.9}
+
+.foot{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);padding:30px 0 40px;border-top:1px solid var(--rule)}
+.cover text{font-family:var(--sans)}.cover .serif{font-family:var(--serif)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .18 0" result="g"/>
+      <feBlend in="SourceGraphic" in2="g" mode="multiply"/>
+    </filter>
+    <filter id="soft"><feGaussianBlur stdDeviation=".6"/></filter>
+  </defs>
+</svg>
+<div class="wrap">
+  <div class="top">
+    <div class="name">Amity Qiu <span>邱璐鑫</span></div>
+    <a href="mailto:Amity_Qiu@outlook.com">Amity_Qiu@outlook.com</a>
+  </div>
+
+  <div class="stage">
+    <div class="motto">
+      <h1>让内容有价值，<br>让传播有温度。</h1>
+      <p>有价值的内容，不光是被官方媒体和业务认可，还得被大家认可。官媒署名的稿子，有媒体愿意报道的新年礼盒，写的东西有用户愿意互动，这些就是品牌的口碑，也是有价值的内容。哪怕新年礼盒包装上的一行字，我也希望它能说出品牌的价值，和这份礼物想传递的人文价值。</p>
+      <p>而温度也不只是温暖。是一种能稳住人心神的力量。所以礼盒上我写的是“你的能量仓已开启”，希望你通过礼品重获生活的能量、通过使用 Style3D 能充盈工作的能量；做雇主品牌，我会去找全职的同事和实习生畅聊，把我们的对话写成一篇又一篇访谈，让更多的人了解到 Meshy，了解到在 Meshy 上班的快乐与收获。 品牌形象也好，雇主品牌也好，我想做的都是这样的内容：有力量，有温度，有价值。</p>
+      <div class="hint" id="hint">欢迎抽一本我的案例case，来听我讲故事。</div>
+    </div>
+
+    <div class="shelf" id="shelf">
+      <button class="book" data-id="style3d" style="--c:#c33a24;--t:#f6e3dc;--sw:62px;--h:296px;--cw:211px">
+        <div class="b3d"><div class="spine"><span>Style3D 新年礼盒</span><small>2026</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c1"><rect width="300" height="420"/></clipPath></defs>
+  <g clip-path="url(#c1)">
+    <rect width="300" height="420" fill="#c33a24"/>
+    <rect width="300" height="420" fill="#c33a24" filter="url(#grain)"/>
+    <text x="-8" y="300" font-size="300" font-weight="900" fill="#efe1d6" opacity=".92">礼</text>
+    <text x="150" y="44" text-anchor="middle" font-size="12" fill="#2a1a15" letter-spacing="3">2026 · Style3D 新年品牌礼盒</text>
+    <path d="M182 272 l-26 46 h30 l-22 46" fill="none" stroke="#2a1a15" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="150" y="366" text-anchor="middle" font-size="22" fill="#2a1a15" letter-spacing="10">一起充能</text>
+    <text x="150" y="388" text-anchor="middle" font-size="10" fill="#2a1a15" letter-spacing="2" class="serif">RECHARGE TOGETHER · Style3D</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
+      <button class="book" data-id="exhibition" style="--c:#2f4a3f;--t:#dfe4d6;--sw:44px;--h:276px;--cw:197px">
+        <div class="b3d"><div class="spine"><span>国家艺术基金巡展</span><small>2026</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c2"><rect width="300" height="420"/></clipPath></defs>
+  <g clip-path="url(#c2)">
+    <rect width="300" height="420" fill="#2f4a3f"/>
+    <rect width="300" height="420" fill="#2f4a3f" filter="url(#grain)"/>
+    <text x="150" y="50" text-anchor="middle" font-size="12" fill="#cfd9c9" letter-spacing="3">国家艺术基金 · 浙江理工大学 · 2026</text>
+    <text x="60" y="300" font-size="290" font-weight="900" fill="#e6e1cf" opacity=".92">展</text>
+    <path d="M40 330 c30 -18 55 6 80 -10 s45 -20 70 -2 s40 22 70 -4" fill="none" stroke="#c33a24" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="150" y="366" text-anchor="middle" font-size="22" fill="#e6e1cf" letter-spacing="6">织锦与文字的交织</text>
+    <text x="150" y="388" text-anchor="middle" font-size="10" fill="#cfd9c9" letter-spacing="2" class="serif">WOVEN INTO WORDS · HANGZHOU 2026</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
+      <button class="book" data-id="early" style="--c:#d9a941;--t:#3a2a08;--sw:54px;--h:262px;--cw:187px">
+        <div class="b3d"><div class="spine"><span>习作</span><small>2021–<br>2025</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c3"><rect width="300" height="420"/></clipPath></defs>
+  <g clip-path="url(#c3)">
+    <rect width="300" height="420" fill="#d9a941"/>
+    <rect width="300" height="420" fill="#d9a941" filter="url(#grain)"/>
+    <text x="150" y="50" text-anchor="middle" font-size="12" fill="#5a4310" letter-spacing="3">2021 – 2026 · 在校期间</text>
+    <text x="30" y="318" font-size="300" font-weight="900" fill="#f4ead3" opacity=".95">作</text>
+    <circle cx="228" cy="110" r="6" fill="#2a1a15"/>
+    <circle cx="70" cy="330" r="4" fill="#2a1a15"/>
+    <path d="M200 300 q10 -40 40 -30" fill="none" stroke="#c33a24" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="150" y="366" text-anchor="middle" font-size="22" fill="#2a1a15" letter-spacing="14">作品</text>
+    <text x="150" y="388" text-anchor="middle" font-size="10" fill="#5a4310" letter-spacing="2" class="serif">MY WORK · 2021 – 2026</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
+      <button class="book" data-id="articles" style="--c:#efeae0;--t:#2a1a15;--sw:40px;--h:300px;--cw:214px">
+        <div class="b3d"><div class="spine"><span>文章</span><small>2022–<br>2026</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c4"><rect width="300" height="420"/></clipPath>
+    <pattern id="lines" width="300" height="9" patternUnits="userSpaceOnUse"><rect x="0" y="4" width="300" height="1.2" fill="#c9c2b6"/></pattern>
+  </defs>
+  <g clip-path="url(#c4)">
+    <rect width="300" height="420" fill="#efeae0"/>
+    <rect width="300" height="420" fill="#efeae0" filter="url(#grain)"/>
+    <!-- faint column text -->
+    <rect x="28" y="70" width="110" height="130" fill="url(#lines)" opacity=".8"/>
+    <rect x="160" y="70" width="112" height="90" fill="url(#lines)" opacity=".8"/>
+    <rect x="160" y="175" width="112" height="25" fill="url(#lines)" opacity=".8"/>
+    <line x1="28" y1="60" x2="272" y2="60" stroke="#2a1a15" stroke-width="2"/>
+    <text x="28" y="48" font-size="10.5" fill="#2a1a15" letter-spacing="1" class="serif">稿件汇编</text>
+    <text x="272" y="48" text-anchor="end" font-size="10.5" fill="#2a1a15" class="serif">2022 –</text>
+    <!-- big character -->
+    <text x="-6" y="330" font-size="270" font-weight="900" fill="#2a1a15">稿</text>
+    <!-- red byline block -->
+    <rect x="182" y="238" width="90" height="42" fill="#c33a24"/>
+    <text x="227" y="268" text-anchor="middle" font-size="24" font-weight="700" fill="#fff" letter-spacing="6">署名</text>
+    <path d="M186 302 c20 6 40 -8 62 0 s30 12 44 -2" fill="none" stroke="#c33a24" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="150" y="372" text-anchor="middle" font-size="15" fill="#2a1a15" letter-spacing="3">从严肃的新闻到活泼的文案</text>
+    <text x="150" y="392" text-anchor="middle" font-size="10" fill="#7a6e66" letter-spacing="2" class="serif">FROM HARD NEWS TO PLAYFUL COPY</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
+      <button class="book" data-id="research" style="--c:#5b4a6b;--t:#eee8f0;--sw:34px;--h:250px;--cw:179px">
+        <div class="b3d"><div class="spine"><span>研究</span><small>2022–<br>2026</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c5"><rect width="300" height="420"/></clipPath></defs>
+  <g clip-path="url(#c5)">
+    <rect width="300" height="420" fill="#5b4a6b"/>
+    <rect width="300" height="420" fill="#5b4a6b" filter="url(#grain)"/>
+    <text x="40" y="310" font-size="270" font-weight="900" fill="#e9e2ea" opacity=".9">美</text>
+    <text x="150" y="44" text-anchor="middle" font-size="12" fill="#1f1826" letter-spacing="1.5">CSSCI · 《马克思主义美学研究》 · 2026</text>
+    <path d="M118 246 c-8 -30 30 -40 34 -12 c4 26 -30 30 -34 12 z" fill="none" stroke="#c33a24" stroke-width="2" stroke-linecap="round"/>
+    <path d="M136 260 c4 40 -14 60 -6 90" fill="none" stroke="#c33a24" stroke-width="2" stroke-linecap="round"/>
+    <text x="150" y="352" text-anchor="middle" font-size="15" fill="#e9e2ea" letter-spacing="3">审美劳动的异化与反思</text>
+    <text x="150" y="372" text-anchor="middle" font-size="11" fill="#d9d0e0" letter-spacing="1">以浙江小百花越剧团为例</text>
+    <text x="150" y="392" text-anchor="middle" font-size="10" fill="#d9d0e0" letter-spacing="2" class="serif">AESTHETIC LABOUR · SECOND AUTHOR</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
+
+      <div class="stack" id="stack">
+        <button class="obj notebook" data-id="notes" aria-label="随心记">
+          <span class="body"></span><span class="base"></span><span class="lid"></span><span class="band"></span><span class="tag">随心记</span>
+        </button>
+        <button class="obj camera" data-id="camera" aria-label="照片">
+          <span class="hump"></span><span class="plate"></span><span class="dial"></span><span class="shutterbtn"></span>
+          <span class="body"></span><span class="leather"></span><span class="lens"></span><span class="vf"></span><span class="dot"></span>
+        </button>
+        <small>照片 · 随心记</small>
+      </div>
+    </div>
+
+    <!-- ===== panel ===== -->
+    <div class="panel" id="panel">
+
+      <section class="chapter" data-ch="style3d"><div class="page">
+        <h2>Style3D 新年品牌礼盒与 AR 红包传播</h2>
+        <p class="sub">凌迪科技 Style3D　2025.10 – 2026.02</p>
+        <p class="role"><b>品牌公关</b>　策划、内容、跨部门执行</p>
+        <p class="lede">围绕新年这个年度传播节点，把一盒礼物做成品牌触点：从礼盒策划、包装文案到 AR 红包互动，再到公众号与视频内容的持续输出，客户和媒体两条路径同时走。</p>
+        <ul class="facts"><li><b>23<i>篇</i></b>独立完成的公众号内容，含 1 篇 SVG 互动</li><li><b>25<i>条</i></b>品牌视频脚本</li><li><b>1<i>套</i></b>礼盒项目 SOP 与执行流程</li></ul>
+        <div class="grid c3"><div class="ph r169 sp2">礼盒实物</div><div class="ph r34">SVG 互动</div><div class="ph r11">小红书传播</div><div class="ph r11">收到的反馈</div><div class="ph r11">公众号内容</div></div>
+        <div class="cols"><div><h3>传播策略</h3><ul><li>参与新年品牌传播方案设计，明确礼盒作为年度品牌触点的定位与目标</li><li>定义客户与媒体双传播路径</li></ul></div><div><h3>跨部门协作</h3><ul><li>对接设计、产品、销售及供应商，把礼盒从方案推到落地</li><li>建立礼盒项目 SOP 与执行流程规范</li></ul></div></div>
+      </div></section>
+
+      <section class="chapter" data-ch="exhibition"><div class="page">
+        <h2>国家艺术基金巡展的媒体传播</h2>
+        <p class="sub">131 件织锦精品杭州展　浙江理工大学　2026</p>
+        <p class="role"><b>媒体传播与公关执行</b>　在校期间参与</p>
+        <p class="lede">一场国家艺术基金支持的织锦巡展，在杭州开幕。期间参与媒体传播相关事宜。开幕当天做媒体接待和采访安排：8 家媒体的现场联络、新闻稿的撰写和分发，以及后续报道的收集整理。</p>
+        <p class="lede">央视、浙江在线、潮新闻等的报道底稿由我撰写，其中杭州新闻发表的<a href="https://apiv4.cst123.cn/cst/news/shareDetail?id=1234530070102540288&amp;ic=wvsghu5c8j" target="_blank" rel="noopener">《131件织锦精品亮相杭州，国家艺术基金巡展再现“锦绣中华”新活力》</a>由我署名。</p>
+        <div class="grid c3"><div class="ph r169 sp2">开幕式现场</div><div class="ph r34">报道页面</div></div>
+        <div class="grid c2"><div class="ph r169">央视、浙江在线、潮新闻等报道</div><div class="ph r169">多平台发布记录</div></div>
+      </div></section>
+
+      <section class="chapter" data-ch="early"><div class="page">
+        <h2>习作</h2>
+        <p class="sub">在校期间练手的作品　2021 – 2025</p>
+        <p class="lede">从策划到拍摄到剪辑，很多环节都是自己带着团队一力完成。</p>
+        <div class="sub-item"><div><h3>世界读书日：浙大赵瑜读书会直播</h3><p>「人工智能时代的传播反思」主题读书会，做直播的内容策划与传播。</p><div class="tag">浙江理工大学</div></div><div class="ph r34">海报</div></div>
+        <div class="sub-item"><div><h3>非遗纪录片《饵饵相传》</h3><p>担任组长拍摄。讲饵块的制作与市井售卖的传统，也讲云南本土咖啡店把它当茶点的新做法。</p><div class="tag">昆明学院　组长</div></div><div class="ph r169">纪录片截图</div></div>
+        <div class="sub-item"><div><h3>新闻节目《一季资讯》</h3><p>稿件、录制、剪辑全程由团队自己完成，作为组长带队，同时出镜播报。</p><div class="tag">昆明学院　组长、主持人</div></div><div class="ph r169">节目截图</div></div>
+        <div class="sub-item"><div><h3>大广赛获奖作品《可画厨房》</h3><p>总策划，获第十四届大广赛云南赛区三等奖。</p><div class="tag">云南赛区三等奖</div></div><div class="ph r34" style="max-width:130px">证书</div></div>
+      </div></section>
+
+      <section class="chapter" data-ch="articles"><div class="page">
+        <h2>文章</h2>
+        <p class="sub">掌上春城 · Style3D · Meshy　2022 – 2026</p>
+        <p class="lede">这个部分是我的署名报道、公众号文章和访谈的汇编，欢迎来听我讲不同的故事。</p>
+        <ul class="list">
+          <li>七夕活动“花样”防艾　云南省健康宣教中心教你远离艾滋<span>掌上春城　2022 年 8 月</span></li>
+          <li>防诈全覆盖　官渡警方进社区面对面开展养老防诈宣传<span>掌上春城　2022 年 8 月</span></li>
+          <li>“百日行动”有成果！官渡公安通报表彰先进集体和个人<span>掌上春城　2022 年 8 月</span></li>
+          <li>“荷”你有约！禄劝平安福邀你共赏百亩荷花<span>掌上春城　2022 年 7 月</span></li>
+          <li>589 个盘龙好故事讲述“我们的新时代”，59 件作品得奖啦<span>掌上春城　2022 年 7 月</span></li>
+          <li>美图模式打开安宁凤仪　诗意生活并不遥远<span>掌上春城　2022 年 8 月</span></li>
+        </ul>
+        <p class="note">Style3D 公众号文章、Meshy 实习生与 mentor 访谈：待补。</p>
+      </div></section>
+
+      <section class="chapter" data-ch="research"><div class="page">
+        <h2>研究与学习</h2>
+        <p class="sub">CSSCI 论文与在读经历</p>
+        <p class="role"><b>第二作者</b></p>
+        <p class="lede">审美劳动的异化与反思：基于马克思主义美学对体制内戏曲传播困境的批判与重构——以浙江小百花越剧团为例。发表于 CSSCI 来源期刊《马克思主义美学研究》，2026 年 4 月。</p>
+        <div class="grid c2"><div class="ph r169">发表页</div><div></div></div>
+        <h3 class="h3s">另一项参与的研究</h3>
+        <p class="lede small">中国居民心理与行为调查，北京大学公共卫生学院、上海交通大学、山东省立医院联合调查研究组，2023 年 4 – 6 月。负责田野信息收集与最后的数据整合，用 R、Excel 和 PowerBI 做基础统计与数据处理。</p>
+        <div class="cols"><div><h3>浙江理工大学　新闻与传播　硕士</h3><ul><li>2024.9 – 2027.6，研究生学分已修完</li><li>浙江省会展策划大赛二等奖、全国三等奖</li><li>清华大学 2024 秋季「大数据与因果推断研讨班」结课</li></ul></div><div><h3>昆明学院　广播电视学　本科</h3><ul><li>2020.9 – 2024.6，GPA 3.57 / 4.0</li><li>连续三年一等奖学金，云南省三好学生</li><li>省级优秀毕业生等奖项 20 余项</li></ul></div></div>
+      </div></section>
+
+      <section class="chapter" data-ch="camera">
+        <div class="finder">
+          <div class="frame"><span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span><span class="cross"></span><div class="photo" id="photo"></div></div>
+          <div class="capbar"><span id="capText"></span><button class="shutter" id="next" aria-label="下一张"></button><span class="k"><span id="counter">1 / 5</span>　左右键翻页</span></div>
+        </div>
+      </section>
+
+      <section class="chapter" data-ch="notes"><div class="page">
+        <h2>随心记</h2>
+        <p class="sub">想到什么写什么，最新的在上面</p>
+        <div class="entry"><time>2026.09.03</time><p>示例条目。这里是你随手写的东西，几十字也好，几百字也好，都是一条。</p></div>
+        <div class="entry"><time>2026.08.21</time><p>示例条目。字体用宋体，行距放宽，读起来像翻一本手账，不像看列表。</p></div>
+        <div class="entry"><time>2026.07.02</time><p>示例条目。如果哪天写得长了，再决定要不要做成可以点进去的独立页。</p></div>
+      </div></section>
+
+    </div>
+  </div>
+
+  <div class="foot"><span>Portfolio 2026</span><span>浙江理工大学　新闻与传播　2027 届</span></div>
+</div>
+
+<script>
+(function(){
+  var books=document.querySelectorAll('.book,.obj'), panel=document.getElementById('panel'), shelf=document.getElementById('shelf');
+  var chapters=document.querySelectorAll('.chapter'), hint=document.getElementById('hint'), hintDefault=hint.textContent;
+  var lines={style3d:'一个礼盒，怎么做成品牌触点',exhibition:'怎么宣发一场活动',early:'我学生时期的作品',articles:'我的署名文章汇编',research:'用心洞察世事，用理论总结事实',camera:'拍摄作品记录（仅生活向）',notes:'随手写的奇思妙想'};
+  var cur=null;
+  function open(id){
+    books.forEach(function(b){b.classList.toggle('open',b.dataset.id===id);});
+    chapters.forEach(function(c){c.classList.toggle('in',c.dataset.ch===id);});
+    panel.classList.add('in'); cur=id;
+    setTimeout(function(){
+      var y=shelf.getBoundingClientRect().top+window.scrollY-24;
+      window.scrollTo({top:y,behavior:'smooth'});
+    },80);
+  }
+  function close(){
+    books.forEach(function(b){b.classList.remove('open');});
+    panel.classList.remove('in'); cur=null;
+    setTimeout(function(){chapters.forEach(function(c){c.classList.remove('in');});},600);
+  }
+  books.forEach(function(b){
+    b.addEventListener('click',function(){cur===b.dataset.id?close():open(b.dataset.id);});
+    b.addEventListener('mouseenter',function(){hint.textContent=lines[b.dataset.id]||hintDefault;});
+    b.addEventListener('mouseleave',function(){hint.textContent=hintDefault;});
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+
+  var shots=[
+    {c:'linear-gradient(135deg,#6f5f52,#3b3531)',t:''},
+    {c:'linear-gradient(135deg,#9a8672,#5f7469)',t:''},
+    {c:'linear-gradient(135deg,#c8b59c,#6f5f52)',t:''},
+    {c:'linear-gradient(135deg,#3b3531,#c0331e)',t:''},
+    {c:'linear-gradient(135deg,#dccdb9,#9a8672)',t:''}
+  ], i=0, photo=document.getElementById('photo'), cap=document.getElementById('capText'), cnt=document.getElementById('counter');
+  function go(d){ i=(i+d+shots.length)%shots.length; photo.classList.add('fade');
+    setTimeout(function(){photo.style.background=shots[i].c;cap.textContent=shots[i].t;cnt.textContent=(i+1)+' / '+shots.length;photo.classList.remove('fade');},220); }
+  document.getElementById('next').addEventListener('click',function(){go(1);});
+  document.addEventListener('keydown',function(e){ if(cur==='camera'){if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);} });
+})();
+</script>
+</body>
+</html>
