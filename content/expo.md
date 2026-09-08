@@ -5,7 +5,7 @@
 
 央视、浙江在线、潮新闻等的报道底稿由我撰写，其中杭州新闻发表的[《131件织锦精品亮相杭州，国家艺术基金巡展再现“锦绣中华”新活力》](https://apiv4.cst123.cn/cst/news/shareDetail?id=1234530070102540288&ic=wvsghu5c8j)由我署名。
 
-expo-1.jpg | 开幕式现场的媒体联络
+expo-1.jpg | 开幕式现场的媒体联络 | 宽
 expo-cover.jpg | 报道页面
 expo-media.jpg | 央视、浙江在线、潮新闻等报道
 expo-list.jpg | 多平台发布记录

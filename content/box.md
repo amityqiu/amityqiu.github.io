@@ -7,8 +7,8 @@
 - 撰写 25 条品牌视频脚本
 - 建立 1 套礼盒项目 SOP 与执行流程
 
-box-1.jpg | 新年礼盒实物
-box-poster.jpg | 新年品牌视觉
+box-1.jpg | 新年礼盒实物 | 宽
+box-poster.jpg | 制作新年 VR 红包
 box-svg.jpg | 公众号 SVG 互动推文
 box-xhs.jpg | 小红书传播
 box-feedback.jpg | 收到的反馈
