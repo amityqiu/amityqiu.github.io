@@ -37,7 +37,7 @@ button{font:inherit;color:inherit}
 @media (max-width:900px){.stage{grid-template-columns:1fr;min-height:0;align-items:start}.motto{padding-bottom:10px}}
 
 /* ---- shelf ---- */
-.shelf{position:relative;display:flex;align-items:flex-end;gap:5px;padding:0 20px 0 10px;border-bottom:1px solid var(--ink);perspective:1400px;perspective-origin:50% 60%}
+.shelf{position:relative;display:flex;align-items:flex-end;gap:5px;padding:0 70px 0 10px;border-bottom:1px solid var(--ink);perspective:1400px;perspective-origin:50% 60%}
 .shelf::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:1px;background:var(--rule)}
 @media (max-width:900px){.shelf{overflow-x:auto;overflow-y:visible;padding-top:30px;scrollbar-width:none}.shelf::-webkit-scrollbar{display:none}}
 
@@ -98,6 +98,37 @@ button{font:inherit;color:inherit}
 .camera .dot{position:absolute;left:12px;bottom:38px;width:4px;height:4px;border-radius:50%;background:var(--red);opacity:.5}
 .camera.open .dot{opacity:1;box-shadow:0 0 0 3px rgba(195,58,36,.25)}
 .stack.open-cam small,.stack.open-note small{color:var(--ink)}
+
+
+/* ---- project cards under the shelf ---- */
+.cards{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+@media (max-width:860px){.cards{grid-template-columns:1fr}}
+.card{all:unset;display:grid;grid-template-columns:76px 1fr;gap:18px;padding:18px 20px 18px 18px;border:1px solid var(--rule);cursor:pointer;background:var(--paper);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .3s;text-align:left}
+.card:hover{transform:translateY(-4px);box-shadow:0 24px 40px -28px rgba(36,32,28,.5);border-color:var(--ink-3)}
+.card.on{border-color:var(--ink)}
+.card .mini{width:76px;aspect-ratio:300/420;background:var(--c);background-image:var(--grain);position:relative;overflow:hidden;color:var(--t);font-weight:900;font-family:var(--sans)}
+.card .mini span{position:absolute;left:-8px;bottom:-18px;font-size:72px;line-height:1;opacity:.92}
+.card h3{font-family:var(--serif);font-weight:400;font-size:17px;margin:0 0 2px;line-height:1.3}
+.card .when{font-size:12px;color:var(--ink-3);letter-spacing:.02em;margin-bottom:8px}
+.card p{margin:0;font-size:13.5px;line-height:1.7;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.card .out{margin-top:8px;font-size:12px;color:var(--ink-2)}
+.card .out b{font-weight:500;color:var(--ink)}
+.card .go{margin-top:10px;font-size:12px;color:var(--ink-3)}
+.card:hover .go{color:var(--red)}
+
+/* ---- laptop ---- */
+.laptop{position:absolute;right:-58px;bottom:0;width:118px;height:78px;perspective:700px;transform-style:preserve-3d}
+.laptop .base{position:absolute;left:0;right:0;bottom:0;height:7px;background:#8d857c;background-image:var(--grain);border-radius:2px 2px 3px 3px}
+.laptop .base::after{content:"";position:absolute;left:46px;right:46px;top:1px;height:2px;background:#5e5852;border-radius:1px}
+.laptop .lid{position:absolute;left:4px;right:4px;bottom:7px;height:70px;background:#4a443f;background-image:var(--grain);border-radius:3px 3px 0 0;transform-origin:bottom center;transform:rotateX(-50deg);transition:transform .8s cubic-bezier(.2,.7,.2,1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.laptop .screen{position:absolute;inset:5px 5px 6px;background:#15130f;overflow:hidden}
+.laptop .screen::before{content:"";position:absolute;left:8px;top:8px;width:22px;height:2px;background:#e9e2d8;opacity:.8}
+.laptop .screen::after{content:"";position:absolute;left:8px;top:14px;width:2px;height:7px;background:var(--red);animation:blink 1s steps(2) infinite}
+.laptop .dot{position:absolute;left:50%;top:2px;width:3px;height:3px;margin-left:-1px;border-radius:50%;background:#2a2522}
+@keyframes blink{to{opacity:0}}
+.laptop:hover .lid,.laptop.open .lid{transform:rotateX(-12deg)}
+.laptop.open .screen{background:#1d2a3a}
+.stack{width:190px}
 
 /* ---- panel below shelf ---- */
 .panel{grid-column:1 / -1;overflow:hidden;max-height:0;opacity:0;transition:max-height .8s cubic-bezier(.2,.7,.2,1),opacity .5s;margin-top:40px}
@@ -295,12 +326,19 @@ button{font:inherit;color:inherit}
           <span class="hump"></span><span class="plate"></span><span class="dial"></span><span class="shutterbtn"></span>
           <span class="body"></span><span class="leather"></span><span class="lens"></span><span class="vf"></span><span class="dot"></span>
         </button>
-        <small>照片 · 随心记</small>
+        <button class="obj laptop" data-id="ai" aria-label="AI 实践">
+          <span class="base"></span><span class="lid"><span class="screen"></span><span class="dot"></span></span>
+        </button>
+        <small>照片 · 随心记 · AI 实践</small>
       </div>
     </div>
 
+    <div class="cards" id="cards"></div>
+
     <!-- ===== panel ===== -->
     <div class="panel" id="panel">
+
+      <section class="chapter" data-ch="ai" data-md="ai"><div class="page"><p class="note">读取中…</p></div></section>
 
       <section class="chapter" data-ch="meshy" data-md="meshy"><div class="page"><p class="note">读取中…</p></div></section>
 
@@ -337,10 +375,11 @@ button{font:inherit;color:inherit}
 (function(){
   var books=document.querySelectorAll('.book,.obj'), panel=document.getElementById('panel'), shelf=document.getElementById('shelf');
   var chapters=document.querySelectorAll('.chapter'), hint=document.getElementById('hint'), hintDefault=hint.textContent;
-  var lines={meshy:'从零开始的雇主品牌',style3d:'一个礼盒，怎么做成品牌触点',exhibition:'怎么宣发一场活动',early:'我学生时期的作品',articles:'我的署名文章汇编',research:'用心洞察世事，用理论总结事实',camera:'拍摄作品记录（仅生活向）',notes:'随手写的奇思妙想'};
+  var lines={ai:'零代码做出来的几样东西',meshy:'从零开始的雇主品牌',style3d:'一个礼盒，怎么做成品牌触点',exhibition:'怎么宣发一场活动',early:'我学生时期的作品',articles:'我的署名文章汇编',research:'用心洞察世事，用理论总结事实',camera:'拍摄作品记录（仅生活向）',notes:'随手写的奇思妙想'};
   var cur=null;
   function open(id){
     books.forEach(function(b){b.classList.toggle('open',b.dataset.id===id);});
+    document.querySelectorAll('.card').forEach(function(c){c.classList.toggle('on',c.dataset.card===id);});
     chapters.forEach(function(c){c.classList.toggle('in',c.dataset.ch===id);});
     panel.classList.add('in'); cur=id;
     setTimeout(function(){
@@ -350,6 +389,7 @@ button{font:inherit;color:inherit}
   }
   function close(){
     books.forEach(function(b){b.classList.remove('open');});
+    document.querySelectorAll('.card').forEach(function(c){c.classList.remove('on');});
     panel.classList.remove('in'); cur=null;
     setTimeout(function(){chapters.forEach(function(c){c.classList.remove('in');});},600);
   }
@@ -422,6 +462,28 @@ button{font:inherit;color:inherit}
   document.addEventListener('click',function(e){var im=e.target.closest('.pics img'); if(im){lbox.querySelector('img').src=im.src;lbox.classList.add('on');}});
   lbox.addEventListener('click',function(){lbox.classList.remove('on');});
   document.addEventListener('error',function(e){var im=e.target; if(im.tagName==='IMG'&&im.closest('.pics')){var f=im.closest('.im'); f.innerHTML='<div class="ph">还没传：'+decodeURIComponent(im.getAttribute('src').replace('images/',''))+'</div>';}},true);
+
+
+  // ---- cards: read content/cards.md ----
+  var cardsBox=document.getElementById('cards');
+  var colors={meshy:['#27364f','#e8e4da','菇'],style3d:['#c33a24','#f6e3dc','礼'],exhibition:['#2f4a3f','#dfe4d6','展'],early:['#d9a941','#3a2a08','作'],articles:['#efeae0','#2a1a15','稿'],research:['#5b4a6b','#eee8f0','美']};
+  fetch('content/cards.md',{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(md){
+    if(!md.trim())return;
+    var blocks=md.replace(/\r/g,'').split(/\n\s*\n/).map(function(b){return b.trim();}).filter(Boolean), html='';
+    blocks.forEach(function(b){
+      var lines=b.split('\n'); var head=lines.shift().split('|').map(function(s){return s.trim();});
+      var id=head[0], title=head[1]||'', when=head[2]||'', out='', body=[];
+      lines.forEach(function(l){ if(l.indexOf('核心产出')===0){out=l.replace(/^核心产出[：:]\s*/,'');} else body.push(l.trim()); });
+      var c=colors[id]||['#9a8672','#f2ebe2','·'];
+      html+='<button class="card" data-card="'+id+'"><div class="mini" style="--c:'+c[0]+';--t:'+c[1]+'"><span>'+c[2]+'</span></div><div><h3>'+esc(title)+'</h3><div class="when">'+esc(when)+'</div><p>'+esc(body.join(''))+'</p>'+(out?'<div class="out"><b>核心产出</b>　'+esc(out)+'</div>':'')+'<div class="go">抽出这本 →</div></div></button>';
+    });
+    cardsBox.innerHTML=html;
+    cardsBox.querySelectorAll('.card').forEach(function(c){
+      c.addEventListener('click',function(){open(c.dataset.card);});
+      c.addEventListener('mouseenter',function(){hint.textContent=lines[c.dataset.card]||hintDefault;});
+      c.addEventListener('mouseleave',function(){hint.textContent=hintDefault;});
+    });
+  }).catch(function(){});
 
   // ---- notes: read notes.md ----
   fetch('notes.md',{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(md){

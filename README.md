@@ -2,7 +2,7 @@
 
 网站的字都在 content 文件夹里，一本书一个文件：
 meshy.md Meshy　box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 文章　research.md 研究
-首页两段自我介绍在 home.md。
+首页两段自我介绍在 home.md。书架下面三张项目卡片在 cards.md：每张卡三行起，第一行「id | 标题 | 时间」，中间是摘要，最后一行「核心产出：……」，卡与卡之间空一行；id 只能是 meshy、style3d、exhibition、early、articles、research。笔记本电脑点开的「AI 实践」在 ai.md。
 改法：在 GitHub 里点开文件，右上角铅笔，改完点 Commit changes，等两分钟刷新网站。
 
 ## 写法（就这几种）
