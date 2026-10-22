@@ -1,11 +1,11 @@
-# 怎么改网站内容
+# 怎么改网站内容（给自己的备忘录）
 
 网站的字都在 content 文件夹里，一本书一个文件：
-meshy.md Meshy　box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 文章　research.md 研究
+meshy.md Meshy　box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 文章　research.md 研究……
 首页两段自我介绍在 home.md。书架下面三张项目卡片在 cards.md：每张卡三行起，第一行「id | 标题 | 时间」，中间是摘要，最后一行「核心产出：……」，卡与卡之间空一行；id 只能是 meshy、style3d、exhibition、early、articles、research、ai。笔记本电脑点开的「AI 实践」在 ai.md。
 改法：在 GitHub 里点开文件，右上角铅笔，改完点 Commit changes，等两分钟刷新网站。
 
-## 写法（就这几种）
+## 写法
 
 # 大标题　　　　一行开头一个井号加空格，是这本书的名字，每个文件只写一个
 ## 小标题　　　　两个井号加空格
@@ -28,3 +28,4 @@ meshy.md Meshy　box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 
 
 ## 不要动的
 index.html 是网页本身，不用改。图片和照片的文件名尽量用英文或数字，中文名在有些电脑上会变乱码。书脊、封面上的字和鼠标滑过的那几句在里面，要改找 Claude。
+谢谢克劳德同学
