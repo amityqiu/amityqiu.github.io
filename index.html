@@ -65,7 +65,7 @@ button{font:inherit;color:inherit}
 
 /* rise-in */
 .book{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
-.book:nth-child(1){animation-delay:.05s}.book:nth-child(2){animation-delay:.12s}.book:nth-child(3){animation-delay:.19s}.book:nth-child(4){animation-delay:.26s}.book:nth-child(5){animation-delay:.33s}.book:nth-child(6){animation-delay:.5s}.book:nth-child(7){animation-delay:.58s}
+.book:nth-child(1){animation-delay:.05s}.book:nth-child(2){animation-delay:.12s}.book:nth-child(3){animation-delay:.19s}.book:nth-child(4){animation-delay:.26s}.book:nth-child(5){animation-delay:.33s}.book:nth-child(6){animation-delay:.5s}.book:nth-child(7){animation-delay:.58s}.book:nth-child(8){animation-delay:.66s}
 @keyframes rise{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
 @media (prefers-reduced-motion:reduce){.book{animation:none;opacity:1}.b3d,.book{transition:none}}
 
@@ -185,6 +185,21 @@ button{font:inherit;color:inherit}
     </div>
 
     <div class="shelf" id="shelf">
+      <button class="book" data-id="meshy" style="--c:#27364f;--t:#e8e4da;--sw:52px;--h:312px;--cw:223px">
+        <div class="b3d"><div class="spine"><span>Meshy 雇主品牌</span><small>2026–</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs><clipPath id="c6"><rect width="300" height="420"/></clipPath></defs>
+  <g clip-path="url(#c6)">
+    <rect width="300" height="420" fill="#27364f"/>
+    <rect width="300" height="420" fill="#27364f" filter="url(#grain)"/>
+    <text x="34" y="306" font-size="280" font-weight="900" fill="#e8e4da" opacity=".92">菇</text>
+    <text x="150" y="44" text-anchor="middle" font-size="12" fill="#dfe3ea" letter-spacing="3">Meshy · 雇主品牌 · 2026 –</text>
+    <circle cx="236" cy="118" r="5" fill="#c33a24"/>
+    <path d="M62 330 c20 -14 40 10 62 -4 s44 -16 66 2 s38 14 56 -6" fill="none" stroke="#c33a24" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="150" y="366" text-anchor="middle" font-size="22" fill="#e8e4da" letter-spacing="8">菇类报到</text>
+    <text x="150" y="388" text-anchor="middle" font-size="10" fill="#dfe3ea" letter-spacing="2" class="serif">EMPLOYER BRAND · AI FOR FUN</text>
+  </g>
+</svg></div></div><div class="shadow"></div>
+      </button>
       <button class="book" data-id="style3d" style="--c:#c33a24;--t:#f6e3dc;--sw:62px;--h:296px;--cw:211px">
         <div class="b3d"><div class="spine"><span>Style3D 新年礼盒</span><small>2026</small></div><div class="cover"><svg viewBox="0 0 300 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
   <defs><clipPath id="c1"><rect width="300" height="420"/></clipPath></defs>
@@ -287,6 +302,8 @@ button{font:inherit;color:inherit}
     <!-- ===== panel ===== -->
     <div class="panel" id="panel">
 
+      <section class="chapter" data-ch="meshy" data-md="meshy"><div class="page"><p class="note">读取中…</p></div></section>
+
       <section class="chapter" data-ch="style3d" data-md="box"><div class="page"><p class="note">读取中…</p></div></section>
 
       <section class="chapter" data-ch="exhibition" data-md="expo"><div class="page"><p class="note">读取中…</p></div></section>
@@ -320,7 +337,7 @@ button{font:inherit;color:inherit}
 (function(){
   var books=document.querySelectorAll('.book,.obj'), panel=document.getElementById('panel'), shelf=document.getElementById('shelf');
   var chapters=document.querySelectorAll('.chapter'), hint=document.getElementById('hint'), hintDefault=hint.textContent;
-  var lines={style3d:'一个礼盒，怎么做成品牌触点',exhibition:'怎么宣发一场活动',early:'我学生时期的作品',articles:'我的署名文章汇编',research:'用心洞察世事，用理论总结事实',camera:'拍摄作品记录（仅生活向）',notes:'随手写的奇思妙想'};
+  var lines={meshy:'从零开始的雇主品牌',style3d:'一个礼盒，怎么做成品牌触点',exhibition:'怎么宣发一场活动',early:'我学生时期的作品',articles:'我的署名文章汇编',research:'用心洞察世事，用理论总结事实',camera:'拍摄作品记录（仅生活向）',notes:'随手写的奇思妙想'};
   var cur=null;
   function open(id){
     books.forEach(function(b){b.classList.toggle('open',b.dataset.id===id);});

@@ -1,7 +1,7 @@
 # 怎么改网站内容
 
 网站的字都在 content 文件夹里，一本书一个文件：
-box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 文章　research.md 研究
+meshy.md Meshy　box.md 礼盒　expo.md 巡展　early.md 习作　articles.md 文章　research.md 研究
 首页两段自我介绍在 home.md。
 改法：在 GitHub 里点开文件，右上角铅笔，改完点 Commit changes，等两分钟刷新网站。
 
