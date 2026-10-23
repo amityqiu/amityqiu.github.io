@@ -46,13 +46,13 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
 /* hero */
-.hero{min-height:100vh;display:grid;align-content:center;padding:120px 0 60px}
+.hero{min-height:100vh;display:grid;align-content:center;padding:120px clamp(20px,5vw,64px) 60px}
 .hero .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--orange);text-transform:uppercase;margin-bottom:28px}
 .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(44px,8.6vw,118px);line-height:1.08;letter-spacing:-.01em;margin:0 0 40px;max-width:11em}
 .hero h1 em{font-style:normal;color:var(--orange)}
 .hero .lede{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;max-width:980px}
 .hero .lede p{margin:0;font-size:16px;line-height:1.9;color:var(--ink-2)}
-@media (max-width:760px){.hero .lede{grid-template-columns:1fr;gap:16px}.hero{padding-top:100px}}
+@media (max-width:760px){.hero .lede{grid-template-columns:1fr;gap:16px}.hero{padding-top:96px;min-height:0}.hero h1{font-size:clamp(36px,11vw,48px);margin-bottom:28px}.hero .kicker{font-size:11px;letter-spacing:.1em}.hero .lede p{font-size:15px;line-height:1.85}.scrollhint{margin-top:40px}}
 .scrollhint{margin-top:64px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ink-3);display:flex;align-items:center;gap:12px}
 .scrollhint i{display:block;width:1px;height:40px;background:var(--ink-3);animation:drop 1.6s ease-in-out infinite}
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -158,12 +158,17 @@ a{color:inherit}
 .sec{padding:clamp(64px,10vh,110px) 0}
 
 /* ---- stats ---- */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-.stat{background:#fff;border:1px solid var(--rule);border-radius:14px;padding:26px 24px 22px;position:relative;overflow:hidden}
-.stat .num{font-family:var(--mono);font-weight:600;font-size:clamp(40px,4.6vw,60px);line-height:1;color:var(--orange);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stats{background:var(--orange);color:#FFFCEE;border-radius:24px;padding:16px clamp(16px,3vw,36px);display:grid;grid-template-columns:repeat(3,1fr)}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:30px 22px 26px;position:relative;border-bottom:1px solid rgba(255,252,238,.28)}
+.stat:nth-child(3n){border-right:0}
+.stat:nth-last-child(-n+3){border-bottom:0}
+.stat:not(:nth-child(3n)){border-right:1px solid rgba(255,252,238,.28)}
+@media (max-width:700px){.stat:nth-child(3n){border-right:1px solid rgba(255,252,238,.28)}.stat:nth-child(2n){border-right:0}.stat:nth-last-child(-n+3){border-bottom:1px solid rgba(255,252,238,.28)}.stat:nth-last-child(-n+2){border-bottom:0}}
+.stat .num{font-family:var(--mono);font-weight:600;font-size:clamp(44px,5.2vw,72px);line-height:1;color:#FFFCEE;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .stat .num small{font-size:.5em;margin-left:2px}
-.stat .lab{margin-top:10px;font-size:15px;font-weight:500}
-.stat .sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.stat .lab{margin-top:12px;font-size:15px;font-weight:500}
+.stat .sub{font-size:12px;color:rgba(255,252,238,.72);margin-top:2px}
 .stat .bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--orange-soft)}
 .stat .bar i{display:block;height:100%;width:0;background:var(--orange);transition:width 1.6s cubic-bezier(.2,.7,.2,1)}
 .stat.in .bar i{width:var(--w,100%)}
@@ -275,7 +280,7 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
 
   <section class="sec" id="shelf">
     <div class="wrap">
-      <div class="sec-head rv"><div><div class="n en">01 · SHELF</div><h2>从架子上抽一本</h2></div><p>一书一项目，点击看全部。</p></div>
+      <div class="sec-head rv"><div><div class="n en">01 · SHELF</div><h2>从架子上抽一本</h2></div><p>每本书是一个项目。鼠标滑过先看一眼，点开看全部。</p></div>
       <div class="shelf-wrap rv d1">
         <div class="shelf" id="shelfEl">
           <button class="book" data-id="meshy" style="--c:#27364f;--t:#e8e4da;--sw:52px;--h:312px;--cw:223px">
@@ -406,9 +411,9 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
       <div class="ai rv">
         <div>
           <div class="n en" style="color:var(--orange);font-size:13px;letter-spacing:.14px;margin-bottom:14px">04 · AI</div>
-          <h2>依托AI辅助开发，<br>把想法落地<em>为可用工具</em>。</h2>
-          <p>作品集站点、小程序、舆情流程、打卡页面、秋招筛选工具，由我主导需求与方案设计，协作AI完成代码实现与迭代。</p>
-          <button class="btn" data-open="ai">了解落地</button>
+          <h2>不会写代码，<br>但东西都<em>做出来了</em>。</h2>
+          <p>这个网站、一个微信小程序、一套舆情监控流程、一个打卡页、一个秋招筛选工具。我负责想清楚，AI 负责实现。</p>
+          <button class="btn" data-open="ai">看看怎么做的</button>
         </div>
         <div class="art"><div class="laptop"><span class="base"></span><span class="lid"><span class="screen"></span></span></div></div>
       </div>
@@ -419,7 +424,7 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
     <div class="wrap">
       <div class="sec-head rv"><div><div class="n en">05 · LIFE</div><h2>工作之外</h2></div></div>
       <div class="life">
-        <button class="tile rv" data-open="camera"><h3>照片</h3><p>我拍的，非求职向。</p><div class="go en">OPEN →</div></button>
+        <button class="tile rv" data-open="camera"><h3>照片</h3><p>我拍的，不给 HR 看的。</p><div class="go en">OPEN →</div></button>
         <button class="tile rv d1" data-open="notes"><h3>随心记</h3><p>随手写的奇思妙想。</p><div class="go en">OPEN →</div></button>
       </div>
     </div>
@@ -531,7 +536,7 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
       var p=l.split('|').map(function(s){return s.trim();}); if(p.length<2)return;
       var m=p[0].match(/^([\d.,]+)\s*(.*)$/); if(!m)return;
       var n=parseFloat(m[1].replace(/,/g,'')), suf=m[2]||'';
-      html+='<div class="stat"><div class="num"><span class="cnt" data-n="'+n+'">0</span><small>'+esc(suf)+'</small></div><div class="lab">'+esc(p[1])+'</div><div class="sub">'+esc(p[2]||'')+'</div><svg class="spark" viewBox="0 0 64 28"><path d="M2 24 C 14 22, 20 18, 28 16 S 42 12, 50 7 S 58 4, 62 2"/></svg><div class="bar"><i></i></div></div>';
+      html+='<div class="stat"><div class="num"><span class="cnt" data-n="'+n+'">0</span><small>'+esc(suf)+'</small></div><div class="lab">'+esc(p[1])+'</div><div class="sub">'+esc(p[2]||'')+'</div></div>';
     });
     document.getElementById('stats').innerHTML=html; watch();
     var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target,target=el.dataset.n*1,t0=null;cio.unobserve(el);
