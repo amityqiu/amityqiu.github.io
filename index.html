@@ -138,6 +138,25 @@ a{color:inherit}
 .card .go{margin-top:auto;padding-top:14px;font-family:var(--mono);font-size:12px;color:var(--orange);letter-spacing:.06em}
 .card .go::after{content:" →";transition:margin-left .3s}.card:hover .go::after{margin-left:6px}
 
+
+/* ---- preview card under the shelf ---- */
+.preview{max-width:860px;margin:18px auto 0;min-height:0}
+.pcard{display:grid;grid-template-columns:150px 1fr;gap:0;background:#fff;border:1px solid var(--rule);border-radius:16px;overflow:hidden;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .35s cubic-bezier(.2,.7,.2,1)}
+.pcard.in{opacity:1;transform:none}
+.pcard .band{background:var(--c);background-image:var(--grain);position:relative;color:var(--t);min-height:150px}
+.pcard .band span{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);font-size:108px;line-height:1;font-weight:900;font-family:var(--sans);opacity:.9;letter-spacing:-.04em}
+.pcard .band .when{position:absolute;left:14px;top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;opacity:.85}
+.pcard .body{padding:18px 22px 16px;display:flex;flex-direction:column;text-align:left}
+.pcard h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0 0 6px;line-height:1.3}
+.pcard p{margin:0 0 10px;font-size:13.5px;line-height:1.7;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pcard .out{font-size:12px;color:var(--ink-2);line-height:1.6}
+.pcard .out b{font-weight:500;color:var(--ink)}
+.pcard .go{all:unset;cursor:pointer;margin-top:12px;align-self:flex-start;font-family:var(--mono);font-size:12px;color:var(--orange);letter-spacing:.06em}
+.pcard .go::after{content:" →"}
+.pcard .go:hover{text-decoration:underline}
+@media (max-width:640px){.pcard{grid-template-columns:1fr}.pcard .band{min-height:90px}.pcard .band span{font-size:80px;bottom:-14px;left:auto;right:16px;transform:none}}
+.sec{padding:clamp(64px,10vh,110px) 0}
+
 /* ---- stats ---- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
 .stat{background:#fff;border:1px solid var(--rule);border-radius:14px;padding:26px 24px 22px;position:relative;overflow:hidden}
@@ -241,7 +260,7 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
   <div class="wrap">
     <a class="brand" href="#top">Amity Qiu <span>邱璐鑫</span></a>
     <nav>
-      <a href="#shelf">书架</a><a href="#work">项目</a><a href="#numbers">数据</a><a href="#ai">AI</a><a href="#life">生活</a><a href="mailto:Amity_Qiu@outlook.com">联系</a>
+      <a href="#shelf">书架</a><a href="#numbers">数据</a><a href="#ai">AI</a><a href="#life">生活</a><a href="mailto:Amity_Qiu@outlook.com">联系</a>
     </nav>
   </div>
 </header>
@@ -256,7 +275,7 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
 
   <section class="sec" id="shelf">
     <div class="wrap">
-      <div class="sec-head rv"><div><div class="n en">01 · SHELF</div><h2>从架子上抽一本</h2></div><p>每本书是一个项目。鼠标滑过看一句话，点开看全部。</p></div>
+      <div class="sec-head rv"><div><div class="n en">01 · SHELF</div><h2>从架子上抽一本</h2></div><p>每本书是一个项目。鼠标滑过先看一眼，点开看全部。</p></div>
       <div class="shelf-wrap rv d1">
         <div class="shelf" id="shelfEl">
           <button class="book" data-id="meshy" style="--c:#27364f;--t:#e8e4da;--sw:52px;--h:312px;--cw:223px">
@@ -370,15 +389,10 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
         </div>
       </div>
       <div class="hint rv d2" id="hint">欢迎抽一本我的案例case，来听我讲故事。</div>
+      <div class="preview" id="preview" aria-live="polite"></div>
     </div>
   </section>
 
-  <section class="sec" id="work">
-    <div class="wrap">
-      <div class="sec-head rv"><div><div class="n en">02 · WORK</div><h2>四个项目</h2></div><p>雇主品牌、品牌礼盒、展览传播，和一堆用 AI 做出来的东西。</p></div>
-      <div class="cards" id="cards"></div>
-    </div>
-  </section>
 
   <section class="sec" id="numbers">
     <div class="wrap">
@@ -489,18 +503,26 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
   // ---------- intro ----------
   getMd('home').then(function(md){var blocks=md.replace(/\r/g,'').split(/\n\s*\n/).map(function(b){return b.trim();}).filter(Boolean);document.getElementById('intro').innerHTML=blocks.map(function(b){return '<p>'+inline(b.replace(/\n/g,''))+'</p>';}).join('');}).catch(function(){});
 
-  // ---------- cards ----------
+  // ---------- preview card (from cards.md) ----------
+  var cardData={}, preview=document.getElementById('preview'), pinned=null, fine=window.matchMedia('(pointer:fine)').matches;
   getMd('cards').then(function(md){
-    var blocks=md.replace(/\r/g,'').split(/\n\s*\n/).map(function(b){return b.trim();}).filter(Boolean), html='', i=0;
-    blocks.forEach(function(b){
+    md.replace(/\r/g,'').split(/\n\s*\n/).map(function(b){return b.trim();}).filter(Boolean).forEach(function(b){
       var ls=b.split('\n'); var head=ls.shift().split('|').map(function(s){return s.trim();});
-      var id=head[0], title=head[1]||'', when=head[2]||'', out='', body=[];
+      var id=head[0], out='', body=[];
       ls.forEach(function(l){ if(l.indexOf('核心产出')===0){out=l.replace(/^核心产出[：:]\s*/,'');} else body.push(l.trim()); });
-      var c=colors[id]||['#9a8672','#f2ebe2','·'];
-      html+='<button class="card rv d'+(i%4)+'" data-open="'+id+'"><div class="band" style="--c:'+c[0]+';--t:'+c[1]+'"><div class="when">'+esc(when)+'</div><span>'+c[2]+'</span></div><div class="body"><h3>'+esc(title)+'</h3><p>'+esc(body.join(''))+'</p>'+(out?'<div class="out"><b>核心产出</b>　'+esc(out)+'</div>':'')+'<div class="go">抽出这本</div></div></button>'; i++;
+      cardData[id]={title:head[1]||titles[id]||'',when:head[2]||'',body:body.join(''),out:out};
     });
-    document.getElementById('cards').innerHTML=html; bindOpen(); watch();
+    if(!fine){pinned='meshy';showPreview('meshy');}
   }).catch(function(){});
+  function showPreview(id){
+    var d=cardData[id]; if(!d){hint.innerHTML='<b>'+esc(titles[id]||'')+'</b>　'+esc(lines[id]||'');preview.innerHTML='';return;}
+    var c=colors[id]||['#9a8672','#f2ebe2','·'];
+    hint.innerHTML='<b>'+esc(titles[id]||'')+'</b>　'+esc(lines[id]||'');
+    preview.innerHTML='<div class="pcard"><div class="band" style="--c:'+c[0]+';--t:'+c[1]+'"><div class="when">'+esc(d.when)+'</div><span>'+c[2]+'</span></div><div class="body"><h3>'+esc(d.title)+'</h3><p>'+esc(d.body)+'</p>'+(d.out?'<div class="out"><b>核心产出</b>　'+esc(d.out)+'</div>':'')+'<button class="go" data-open="'+id+'">抽出这本</button></div></div>';
+    requestAnimationFrame(function(){var pc=preview.querySelector('.pcard');if(pc)pc.classList.add('in');});
+    bindOpen();
+  }
+  function clearPreview(){ if(pinned){showPreview(pinned);return;} hint.textContent=hintDefault; var pc=preview.querySelector('.pcard'); if(pc){pc.classList.remove('in');setTimeout(function(){if(!preview.querySelector('.pcard.in'))preview.innerHTML='';},350);} }
 
   // ---------- stats ----------
   getMd('stats').then(function(md){
@@ -539,10 +561,9 @@ footer a:hover{color:var(--orange);border-color:var(--orange)}
   window.addEventListener('popstate',function(){var h=location.hash.slice(1); if(h&&titles[h]){show(h,false);} else close(true);});
   function bindOpen(){
     document.querySelectorAll('[data-id],[data-open]').forEach(function(b){ if(b._bound)return; b._bound=true;
-      var id=b.dataset.id||b.dataset.open;
-      b.addEventListener('click',function(){show(id);});
-      b.addEventListener('mouseenter',function(){hint.innerHTML='<b>'+esc(titles[id]||'')+'</b>　'+esc(lines[id]||'');});
-      b.addEventListener('mouseleave',function(){hint.textContent=hintDefault;});
+      var id=b.dataset.id||b.dataset.open, isBook=b.classList.contains('book');
+      b.addEventListener('click',function(){ if(isBook&&!fine&&cardData[id]){pinned=id;showPreview(id);return;} show(id); });
+      if(b.dataset.id){ b.addEventListener('mouseenter',function(){if(fine)showPreview(id);}); b.addEventListener('mouseleave',function(){if(fine)clearPreview();}); }
     });
   }
   bindOpen();
